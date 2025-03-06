@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    .total { font-weight: bold; }
+    button { padding: 10px 15px; background-color: green; color: white; border: none; cursor: pointer; margin-top: 20px; }
+    .nav { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+<div class="nav">
+  <a href="/products">Catalogue</a>
+  <a href="/cart">View Cart</a>
+</div>
+
+<h1>Checkout</h1>
+<div th:if="${#lists.isEmpty(cart.items)}">
+  <p>Your cart is empty.</p>
+</div>
+<div th:if="${!#lists.isEmpty(cart.items)}">
+  <h2>Order Summary</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${cart.items}">
+      <td th:text="${item.product.name}">Product Name</td>
+      <td>$<span th:text="${item.product.price}">Price</span></td>
+      <td th:text="${item.quantity}">Quantity</td>
+      <td>$<span th:text="${item.totalPrice}">Total</span></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="3" class="total">Total Cost</td>
+      <td class="total">$<span th:text="${total}">0.00</span></td>
+    </tr>
+    </tfoot>
+  </table>
+
+  <form th:action="@{/checkout/confirm}" method="post">
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+
+<br/>
+<a href="/cart">Back to Cart</a>
+</body>
+</html>

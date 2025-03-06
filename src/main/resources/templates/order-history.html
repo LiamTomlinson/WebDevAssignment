@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Order History</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .order { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+    .order-header { background-color: #f4f4f4; padding: 10px; margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    .total { font-weight: bold; }
+    .nav { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+<div class="nav">
+  <a href="/products">Catalogue</a>
+  <a href="/cart">View Cart</a>
+</div>
+
+<h1>Order History</h1>
+<div th:if="${#lists.isEmpty(orders)}">
+  <p>You haven't placed any orders yet.</p>
+</div>
+<div th:each="order : ${orders}" class="order">
+  <div class="order-header">
+    <p>Order ID: <span th:text="${order.id}">ID</span></p>
+    <p>Date: <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}">Date</span></p>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.items}">
+      <td th:text="${item.productName}">Product Name</td>
+      <td>$<span th:text="${item.productPrice}">Price</span></td>
+      <td th:text="${item.quantity}">Quantity</td>
+      <td>$<span th:text="${item.getTotalPrice()}">Total</span></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td colspan="3" class="total">Total Cost</td>
+      <td class="total">$<span th:text="${order.totalCost}">0.00</span></td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
+
+<br/>
+<a href="/products">Continue Shopping</a>
+</body>
+</html>
