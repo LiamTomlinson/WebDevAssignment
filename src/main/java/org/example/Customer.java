@@ -7,17 +7,6 @@ import java.util.List;
 @Entity
 public class Customer {
 
-
-    private boolean isAdmin = false;
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -3,7 +3,6 @@ package org.example;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class ProductRepository {
@@ -24,64 +23,14 @@ public class ProductRepository {
         products.add(new Product(10L, "Product 10", 109.99, "Description for product 10"));
     }
 
-
+    public List<Product> findAll() {
+        return products;
+    }
 
     public Product findById(Long id) {
         return products.stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst()
                 .orElse(null);
-    }
-
-
-
-    public void save(Product product) {
-        // Assign a new ID if not set
-        if (product.getId() == null) {
-            long maxId = products.stream()
-                    .mapToLong(p -> p.getId())
-                    .max()
-                    .orElse(0);
-            product.setId(maxId + 1);
-            products.add(product);
-        }
-    }
-
-    public void update(Product product) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId().equals(product.getId())) {
-                // Update the product but keep the original name
-                Product existing = products.get(i);
-                existing.setPrice(product.getPrice());
-                existing.setDescription(product.getDescription());
-                existing.setVisible(product.isVisible());
-                break;
-            }
-        }
-    }
-
-    public void toggleVisibility(Long id) {
-        for (Product product : products) {
-            if (product.getId().equals(id)) {
-                product.setVisible(!product.isVisible());
-                break;
-            }
-        }
-    }
-
-    public int count() {
-        return products.size();
-    }
-
-    // method to consider visibility for regular users
-    public List<Product> findAll() {
-        return products;
-    }
-
-    // method to get only visible products for non-admin users
-    public List<Product> findAllVisible() {
-        return products.stream()
-                .filter(Product::isVisible)
-                .collect(Collectors.toList());
     }
 }

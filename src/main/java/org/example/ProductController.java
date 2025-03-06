@@ -12,7 +12,12 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-
+    // List page: Browse all products
+    @GetMapping
+    public String listProducts(Model model) {
+        model.addAttribute("products", productRepository.findAll());
+        return "products";
+    }
 
     // View details of a specific product
     @GetMapping("/{id}")
@@ -24,11 +29,5 @@ public class ProductController {
         }
         model.addAttribute("product", product);
         return "product-details";
-    }
-
-    @GetMapping
-    public String listProducts(Model model) {
-        model.addAttribute("products", productRepository.findAllVisible());
-        return "products";
     }
 }

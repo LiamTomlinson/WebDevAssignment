@@ -1,6 +1,5 @@
 package org.example;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,10 +7,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-
-    @Autowired
-    private OrderRepository orderRepository;
-
 
     public Order placeOrder(Customer customer, ShoppingCart cart) {
         List<OrderItem> orderItems = cart.getItems().stream()
@@ -30,10 +25,6 @@ public class OrderService {
         order.setCustomer(customer);
 
         customer.getOrders().add(order);
-        orderRepository.save(order);
-        customer.getOrders().add(order);
         return order;
     }
-
-
 }
