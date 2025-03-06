@@ -58,4 +58,14 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    private boolean visible = true;
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 }

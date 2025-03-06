@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.id == null ? 'Add New Product' : 'Edit Product'}">Product Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 600px; }
+        label { display: block; margin-top: 10px; }
+        input[type="text"], input[type="number"], textarea { width: 100%; padding: 8px; margin-top: 5px; }
+        textarea { height: 100px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; margin-top: 20px; cursor: pointer; }
+        .admin-nav { margin-bottom: 20px; background-color: #f4f4f4; padding: 10px; }
+        .admin-nav a { margin-right: 15px; text-decoration: none; color: #333; }
+        .disabled { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+<div class="admin-nav">
+    <a href="/admin">Dashboard</a>
+    <a href="/admin/products">Manage Products</a>
+    <a href="/admin/orders">Manage Orders</a>
+    <a href="/products">View Store</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<h1 th:text="${product.id == null ? 'Add New Product' : 'Edit Product - ' + product.name}">Product Form</h1>
+
+<form th:action="${product.id == null ? '/admin/products/add' : '/admin/products/edit/' + product.id}"
+      method="post"
+      th:object="${product}">
+
+    <input type="hidden" th:field="*{id}" th:if="${product.id != null}" />
+
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" th:field="*{name}" th:disabled="${product.id != null}" th:class="${product.id != null ? 'disabled' : ''}" required />
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" th:field="*{price}" step="0.01" min="0" required />
+
+    <label for="description">Description:</label>
+    <textarea id="description" th:field="*{description}" required></textarea>
+
+    <label for="visible" th:if="${product.id != null}">
+        <input type="checkbox" id="visible" th:field="*{visible}" />
+        Visible in store
+    </label>
+
+    <button type="submit" th:text="${product.id == null ? 'Add Product' : 'Update Product'}">Submit</button>
+</form>
+
+<p><a href="/admin/products">Back to Products</a></p>
+</body>
+</html>

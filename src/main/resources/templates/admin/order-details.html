@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .order-info { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .total { font-weight: bold; }
+        .admin-nav { margin-bottom: 20px; background-color: #f4f4f4; padding: 10px; }
+        .admin-nav a { margin-right: 15px; text-decoration: none; color: #333; }
+        .status-form { margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .status-select { padding: 5px; }
+        .status-submit { padding: 5px 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="admin-nav">
+    <a href="/admin">Dashboard</a>
+    <a href="/admin/products">Manage Products</a>
+    <a href="/admin/orders">Manage Orders</a>
+    <a href="/products">View Store</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<h1>Order Details</h1>
+
+<div class="order-info">
+    <p><strong>Order ID:</strong> <span th:text="${order.id}">ID</span></p>
+    <p><strong>Date:</strong> <span th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}">Date</span></p>
+    <p><strong>Customer:</strong> <span th:text="${order.customer.username}">Customer</span></p>
+    <p><strong>Status:</strong> <span th:text="${order.status.displayName}">Status</span></p>
+</div>
+
+<h2>Items</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.items}">
+        <td th:text="${item.productName}">Product Name</td>
+        <td>$<span th:text="${item.productPrice}">Price</span></td>
+        <td th:text="${item.quantity}">Quantity</td>
+        <td>$<span th:text="${item.getTotalPrice()}">Total</span></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3" class="total">Total Cost</td>
+        <td class="total">$<span th:text="${order.totalCost}">0.00</span></td>
+    </tr>
+    </tfoot>
+</table>
+
+<div class="status-form">
+    <h3>Update Order Status</h3>
+    <form th:action="@{'/admin/orders/' + ${order.id} + '/update-status'}" method="post">
+        <select name="status" class="status-select">
+            <option th:each="status : ${statuses}"
+                    th:value="${status}"
+                    th:text="${status.displayName}"
+                    th:selected="${status == order.status}">
+                Status
+            </option>
+        </select>
+        <button type="submit" class="status-submit">Update Status</button>
+    </form>
+</div>
+
+<p><a href="/admin/orders">Back to Orders</a></p>
+</body>
+</html>

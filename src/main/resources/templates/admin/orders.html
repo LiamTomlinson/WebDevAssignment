@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Manage Orders</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .admin-nav { margin-bottom: 20px; background-color: #f4f4f4; padding: 10px; }
+        .admin-nav a { margin-right: 15px; text-decoration: none; color: #333; }
+        .status-pending { color: #ff9900; }
+        .status-processing { color: #0066cc; }
+        .status-shipped { color: #9900cc; }
+        .status-delivered { color: #009900; }
+        .status-cancelled { color: #cc0000; }
+    </style>
+</head>
+<body>
+<div class="admin-nav">
+    <a href="/admin">Dashboard</a>
+    <a href="/admin/products">Manage Products</a>
+    <a href="/admin/orders">Manage Orders</a>
+    <a href="/products">View Store</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<h1>Manage Orders</h1>
+
+<div th:if="${#lists.isEmpty(orders)}">
+    <p>No orders have been placed yet.</p>
+</div>
+
+<table th:if="${!#lists.isEmpty(orders)}">
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">ID</td>
+        <td th:text="${#temporals.format(order.orderDate, 'yyyy-MM-dd HH:mm')}">Date</td>
+        <td th:text="${order.customer.username}">Customer</td>
+        <td>$<span th:text="${order.totalCost}">Total</span></td>
+        <td>
+                    <span th:class="${'status-' + order.status.name().toLowerCase()}"
+                          th:text="${order.status.displayName}">Status</span>
+        </td>
+        <td>
+            <a th:href="@{'/admin/orders/' + ${order.id}}">View Details</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

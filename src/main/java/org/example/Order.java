@@ -74,4 +74,14 @@ public class Order {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    private OrderStatus status = OrderStatus.PENDING;
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }
